@@ -1,16 +1,13 @@
-# flutter_dio
+# Flutter DioUtil
 
-A new Flutter application.
+可直接下载源代码运行
 
-## Getting Started
+如果你还不了解`Dio`查看如下四篇文章，将帮助你更好的理解什么`Dio`以及`DioUtil`
 
-This project is a starting point for a Flutter application.
+[Flutter Dio源码分析(一)–Dio介绍](https://www.liujunmin.com/flutter/dio_introduce.html)
 
-A few resources to get you started if this is your first Flutter project:
+[Flutter Dio源码分析(二)–HttpClient、Http、Dio对比](https://www.liujunmin.com/flutter/dio_compared.html)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+[Flutter Dio源码分析(三)–深度剖析](https://www.liujunmin.com/flutter/dio_analysis.html)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Flutter Dio源码分析(四)–封装](https://www.liujunmin.com/flutter/dio_encapsulation.html)
