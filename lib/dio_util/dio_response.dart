@@ -2,11 +2,11 @@
 class DioResponse<T> {
 
   /// 消息(例如成功消息文字/错误消息文字)
-  final String message;
+  final String? message;
   /// 自定义code(可根据内部定义方式)
-  final int code;
+  final int? code;
   /// 接口返回的数据
-  final T data;
+  final T? data;
   /// 需要添加更多
   /// .........
 

@@ -22,7 +22,7 @@ class DioCacheInterceptors extends Interceptor {
   // 为确保迭代器顺序和对象插入时间一致顺序一致，我们使用LinkedHashMap
   var cache = LinkedHashMap<String, CacheObject>();
   // sp
-  SharedPreferences preferences;
+  SharedPreferences? preferences;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
@@ -43,7 +43,7 @@ class DioCacheInterceptors extends Interceptor {
         // 内存缓存
         if ((DateTime.now().millisecondsSinceEpoch - ob.timeStamp) / 1000 <
             DioUtil.MAX_CACHE_AGE) {
-          return handler.resolve(cache[key].response);
+          return handler.resolve(cache[key]!.response);
         } else {
           //若已过期则删除缓存，继续向服务器请求
           cache.remove(key);

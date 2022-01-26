@@ -25,7 +25,7 @@ class _DioUtilExampleState extends State<DioUtilExample> {
     // });
 
     // DioUtil().openLog();
-    DioUtil.instance.openLog();
+    DioUtil.getInstance()?.openLog();
     // DioUtil.CACHE_ENABLE = true;
     // DioUtil().setProxy(proxyAddress: "https://www.baidu.com", enable: true);
     DioResponse result = await DioUtil().request("/login", method: DioMethod.get, params: {

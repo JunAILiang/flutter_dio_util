@@ -26,58 +26,65 @@ class DioUtil {
   /// 最大缓存条数(默认一百条)
   static int MAX_CACHE_COUNT = 100;
 
-
-  factory DioUtil() => _getInstance();
-  static DioUtil get instance => _getInstance();
-  static DioUtil _instance;
+  static DioUtil? _instance;
+  static Dio _dio = Dio();
   Dio get dio => _dio;
 
-  /// 声明Dio变量
-  Dio _dio;
+  DioUtil._internal() {
+    _instance = this;
+    _instance!._init();
+  }
+
+  factory DioUtil() => _instance ?? DioUtil._internal();
+
+  static DioUtil? getInstance() {
+    _instance ?? DioUtil._internal();
+    return _instance;
+  }
+
+
   /// 取消请求token
   CancelToken _cancelToken = CancelToken();
   /// cookie
   CookieJar cookieJar = CookieJar();
 
-  DioUtil._init() {
-    if (_dio == null) {
-      /// 初始化基本选项
-      BaseOptions options = BaseOptions(
+  _init() {
+    /// 初始化基本选项
+    BaseOptions options = BaseOptions(
         baseUrl: BASE_URL,
         connectTimeout: CONNECT_TIMEOUT,
         receiveTimeout: RECEIVE_TIMEOUT
-      );
+    );
 
-      /// 初始化dio
-      _dio = Dio(options);
+    /// 初始化dio
+    _dio = Dio(options);
 
-      /// 添加拦截器
-      _dio.interceptors.add(DioInterceptors());
+    /// 添加拦截器
+    _dio.interceptors.add(DioInterceptors());
 
-      /// 添加转换器
-      _dio.transformer = DioTransformer();
+    /// 添加转换器
+    _dio.transformer = DioTransformer();
 
-      /// 添加cookie管理器
-      _dio.interceptors.add(CookieManager(cookieJar));
+    /// 添加cookie管理器
+    _dio.interceptors.add(CookieManager(cookieJar));
 
-      /// 刷新token拦截器(lock/unlock)
-      _dio.interceptors.add(DioTokenInterceptors());
+    /// 刷新token拦截器(lock/unlock)
+    _dio.interceptors.add(DioTokenInterceptors());
 
-      /// 添加缓存拦截器
-      _dio.interceptors.add(DioCacheInterceptors());
-    }
+    /// 添加缓存拦截器
+    _dio.interceptors.add(DioCacheInterceptors());
   }
 
   /// 设置Http代理(设置即开启)
   void setProxy({
-    String proxyAddress,
+    String? proxyAddress,
     bool enable = false
   }) {
     if (enable) {
       (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (HttpClient client) {
         client.findProxy = (uri) {
-          return proxyAddress;
+          return proxyAddress ?? "";
         };
         client.badCertificateCallback =
             (X509Certificate cert, String host, int port) => true;
@@ -87,7 +94,7 @@ class DioUtil {
 
   /// 设置https证书校验
   void setHttpsCertificateVerification({
-    String pem,
+    String? pem,
     bool enable = false
   }) {
     if (enable) {
@@ -107,22 +114,15 @@ class DioUtil {
     _dio.interceptors.add(LogInterceptor(responseBody: true));
   }
 
-  static DioUtil _getInstance() {
-    if (_instance == null) {
-      _instance = DioUtil._init();
-    }
-    return _instance;
-  }
-
   /// 请求类
   Future<T> request<T>(String path, {
     DioMethod method = DioMethod.get,
-    Map<String, dynamic> params,
+    Map<String, dynamic>? params,
     data,
-    CancelToken cancelToken,
-    Options options,
-    ProgressCallback onSendProgress,
-    ProgressCallback onReceiveProgress,
+    CancelToken? cancelToken,
+    Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     const _methodValues = {
       DioMethod.get: 'get',
@@ -152,7 +152,7 @@ class DioUtil {
   }
 
   /// 取消网络请求
-  void cancelRequests({CancelToken token}) {
-     token ?? _cancelToken?.cancel("cancelled");
+  void cancelRequests({CancelToken? token}) {
+     token ?? _cancelToken.cancel("cancelled");
   }
 }

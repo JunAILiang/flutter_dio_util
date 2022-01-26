@@ -5,7 +5,7 @@ class DioTokenInterceptors extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (options.headers['refreshToken'] == null) {
-      DioUtil.instance.dio.lock();
+      DioUtil.getInstance()?.dio.lock();
       Dio _tokenDio = Dio();
       _tokenDio..get("http://localhost:8080/getRefreshToken").then((d) {
         options.headers['refreshToken'] = d;
@@ -13,7 +13,7 @@ class DioTokenInterceptors extends Interceptor {
       }).catchError((error, stackTrace) {
         handler.reject(error, true);
       }) .whenComplete(() {
-        DioUtil.instance.dio.unlock();
+        DioUtil.getInstance()?.dio.unlock();
       }); // unlock the dio
     } else {
       options.headers['refreshToken'] = options.headers['refreshToken'];
